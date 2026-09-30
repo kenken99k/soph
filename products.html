@@ -24,6 +24,7 @@
                 <li><a href="products.html" aria-current="page">Products</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact and Pre-orders</a></li>
+                <li><a href="products.html#order-builder">My Order <span class="nav-badge" data-order-badge hidden>0</span></a></li>
             </ul>
         </nav>
     </header>
@@ -38,6 +39,57 @@
             day's notice. There is no online checkout here &mdash; <a href="contact.html">send us
             a request</a> and we will confirm your order, total, and pickup time with you.
         </p>
+
+        <section id="order-builder">
+            <h2>Build Your Pre-order List</h2>
+            <p>
+                Tell us what you would like and we will have it boxed and labeled with your name
+                at pickup. Add items below, adjust the quantities, and then carry the list
+                straight into <a href="contact.html">your order request</a>. Your list is saved
+                in this browser, so you can close the tab and pick it up again later, and the
+                count follows you around the site.
+            </p>
+
+            <h3>1. Choose what you would like</h3>
+            <div class="filter-chips" id="category-filter" role="group" aria-label="Filter products by category">
+                <p class="filter-loading">Loading the catalog&hellip;</p>
+            </div>
+            <p class="catalog-count" id="catalog-count"></p>
+            <div class="cards" id="catalog"></div>
+            <p class="catalog-empty" id="catalog-empty" hidden></p>
+
+            <h3>2. Check your list</h3>
+            <div class="order-panel">
+                <p class="order-empty" id="order-empty">Your pre-order list is empty. Choose something above to get started.</p>
+
+                <ul class="order-items" id="order-items"></ul>
+
+                <dl class="order-totals">
+                    <dt>Items in your list</dt>
+                    <dd id="order-count">0</dd>
+                    <dt>Estimated total</dt>
+                    <dd id="order-total">$0.00</dd>
+                </dl>
+
+                <p class="order-notice" id="order-notice" hidden></p>
+
+                <div class="form-actions">
+                    <button type="button" id="use-list">Use this list in my order request</button>
+                    <button type="button" id="clear-list" class="button-secondary">Clear list</button>
+                </div>
+
+                <p class="order-message" id="order-message" hidden></p>
+            </div>
+
+            <p class="visually-hidden" id="order-live" role="status" aria-live="polite"></p>
+
+            <h3>3. Browse the full range</h3>
+            <p>
+                The list above is a quick way to price and request the things we bake every
+                week. Below is the same range written out in more detail, including the
+                descriptions and the wider price ranges that change with flour and fruit costs.
+            </p>
+        </section>
 
         <section>
             <h2>Breads</h2>
@@ -170,5 +222,9 @@
         <p>Open Monday through Sunday. Baked fresh in Brookfield.</p>
         <p><small>&copy; 2026 North Star Bakery. All rights reserved.</small></p>
     </footer>
+    <script src="js/data.js" defer></script>
+    <script src="js/storage.js" defer></script>
+    <script src="js/order-list.js" defer></script>
+    <script src="js/validate.js" defer></script>
 </body>
 </html>

@@ -25,6 +25,7 @@
     --card: #FFFFFF;            /* neutral: raised cards, forms, tables */
     --crust-tint: #C8791F;      /* lighter tint of --crust for hairlines */
     --crust-on-dark: #EFBE86;   /* lighter tint of --crust, for links on --espresso */
+    --error: #9B2226;           /* status only: form error text and borders */
 
     /* Type */
     --font-display: "Fraunces", Georgia, "Times New Roman", serif;
@@ -73,6 +74,24 @@ body {
     background-color: var(--flour);
     /* Subtle warmth: a faint flour-dust tint at the top of the page. */
     background-image: linear-gradient(180deg, #FFFFFF 0%, var(--flour) 22rem);
+}
+
+/* Utility classes below set display values, which would otherwise beat
+   the browser's built-in [hidden] { display: none }. */
+[hidden] {
+    display: none !important;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* Screenshots and images never overflow their column. */
@@ -518,6 +537,32 @@ textarea:focus {
     background-color: var(--card);
 }
 
+.field-error {
+    display: block;
+    margin-top: var(--space-xs);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--error);
+}
+
+/* The word "Error" means the state is not communicated by colour alone. */
+.field-error::before {
+    content: "Error: ";
+}
+
+input.is-invalid,
+select.is-invalid,
+textarea.is-invalid {
+    border-width: 3px;
+    border-color: var(--error);
+}
+
+input.is-valid,
+select.is-valid,
+textarea.is-valid {
+    border-color: var(--sage);
+}
+
 input[type="checkbox"] {
     width: 1.25rem;
     height: 1.25rem;
@@ -559,17 +604,300 @@ button:hover {
     border-color: var(--crust);
 }
 
-button[type="reset"] {
+button[type="reset"],
+.button-secondary {
     color: var(--espresso);
     background-color: transparent;
 }
 
-button[type="reset"]:hover {
+button[type="reset"]:hover,
+.button-secondary:hover {
     color: var(--flour);
     background-color: var(--espresso);
+    border-color: var(--espresso);
 }
 
-/* ---------- 13. Site footer ---------- */
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+button[type="reset"]:disabled:hover,
+.button-secondary:disabled:hover {
+    color: var(--espresso);
+    background-color: transparent;
+    border-color: var(--espresso);
+}
+
+/* ---------- 13. Interactive pre-order builder ---------- */
+
+/* Nav counter. Updates on every page via js/order-list.js. */
+.nav-badge {
+    display: inline-block;
+    min-width: 1.5rem;
+    padding: 0 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--flour);
+    background-color: var(--crust);
+    border-radius: 999px;
+}
+
+.site-nav a[aria-current="page"] .nav-badge {
+    color: var(--espresso);
+    background-color: var(--flour);
+}
+
+/* Category filter chips */
+.filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin: 0 0 var(--space-md);
+}
+
+.chip {
+    padding: 0.4rem 1rem;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--espresso);
+    background-color: var(--card);
+    border: 2px solid var(--crust-tint);
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.chip:hover {
+    border-color: var(--crust);
+    color: var(--crust);
+}
+
+.chip--active {
+    color: var(--flour);
+    background-color: var(--espresso);
+    border-color: var(--espresso);
+}
+
+.filter-loading,
+.catalog-count,
+.catalog-empty {
+    margin: 0 0 var(--space-md);
+    font-size: 0.95rem;
+    color: var(--sage);
+    font-style: italic;
+}
+
+/* Product cards pushed by JavaScript */
+.product-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-category {
+    margin: 0 0 var(--space-xs);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sage);
+}
+
+.product-blurb {
+    margin: 0 0 var(--space-md);
+    font-size: 0.95rem;
+}
+
+.product-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm);
+    /* Pushes the button to the bottom so cards line up neatly. */
+    margin: auto 0 var(--space-md);
+}
+
+.product-price {
+    font-weight: 700;
+}
+
+.tag {
+    padding: 0.1rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--sage);
+    border: 1px solid var(--sage);
+    border-radius: 999px;
+}
+
+.tag--preorder {
+    color: var(--crust);
+    border-color: var(--crust);
+}
+
+.add-button {
+    margin-top: auto;
+}
+
+/* The list panel */
+.order-panel {
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+    background-color: var(--card);
+    border: var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+}
+
+.order-empty {
+    margin: 0 0 var(--space-md);
+    color: var(--sage);
+    font-style: italic;
+}
+
+.order-items {
+    margin: 0 0 var(--space-md);
+    padding: 0;
+    list-style: none;
+}
+
+.order-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--crust-tint);
+}
+
+.order-item-name {
+    flex: 1 1 12rem;
+    font-weight: 700;
+}
+
+.qty {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.qty-button {
+    width: 2rem;
+    padding: 0.1rem;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+.qty-amount {
+    min-width: 2rem;
+    text-align: center;
+    font-weight: 700;
+}
+
+.order-item-price {
+    flex: 0 0 auto;
+    min-width: 4.5rem;
+    text-align: right;
+    font-weight: 700;
+}
+
+.remove-button {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.85rem;
+    color: var(--crust);
+    background-color: transparent;
+    border-color: transparent;
+    text-decoration: underline;
+}
+
+.remove-button:hover {
+    color: var(--flour);
+    background-color: var(--crust);
+    border-color: var(--crust);
+}
+
+.order-totals {
+    display: grid;
+    grid-template-columns: max-content auto;
+    gap: var(--space-sm) var(--space-lg);
+    justify-content: start;
+    margin: 0 0 var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 3px solid var(--crust-tint);
+}
+
+.order-totals dt {
+    font-weight: 700;
+    color: var(--sage);
+}
+
+.order-totals dd {
+    margin: 0;
+    font-weight: 700;
+}
+
+.order-notice,
+.order-handoff {
+    margin: 0 0 var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--flour);
+    border-left: 4px solid var(--sage);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 0.95rem;
+}
+
+/* Sits inside the form's flex row, so it claims a full line. */
+.order-handoff {
+    flex-basis: 100%;
+    border-left-color: var(--crust);
+}
+
+.order-message {
+    margin: var(--space-sm) 0 0;
+    font-weight: 700;
+    color: var(--sage);
+}
+
+/* Validation summary and success panel */
+.form-summary {
+    margin: 0 0 var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    background-color: var(--flour);
+    border: 2px solid var(--error);
+    border-radius: var(--radius);
+}
+
+.form-summary h3 {
+    margin: 0 0 var(--space-sm);
+    color: var(--error);
+}
+
+.form-summary ul {
+    margin: 0;
+}
+
+.form-success {
+    margin: 0 0 var(--space-lg);
+    padding: var(--space-lg);
+    background-color: var(--card);
+    border: 3px solid var(--sage);
+    border-radius: var(--radius-lg);
+}
+
+.form-success h3 {
+    margin-top: 0;
+    color: var(--sage);
+}
+
+.form-success-note {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--sage);
+}
+
+/* ---------- 14. Site footer ---------- */
 .site-footer {
     margin-top: auto; /* sticks to the bottom of the flex column */
     padding: var(--space-xl) var(--space-md);
